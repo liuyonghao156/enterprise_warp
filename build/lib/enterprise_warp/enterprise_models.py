@@ -235,7 +235,8 @@ class EnterpriseModels(object):
     elif "n_days" in option.keys():
       nfreqs = self.determine_nfreqs(sel_func_name=sel_func_name, cadence=option["ndays"])
     else:
-      nfreqs = self.determine_nfreqs(sel_func_name=sel_func_name)
+      is_common = isinstance(self.psr, list)
+      nfreqs = self.determine_nfreqs(sel_func_name=sel_func_name, common_signal=is_common)
       
     return nfreqs
 
@@ -706,7 +707,8 @@ def toa_mask_from_selection_function(psr,selfunc):
   selfunc: function
     Selection function. Examples are in enterprise.signals.selections
   """
-  args_selfunc = inspect.getargspec(selfunc).args
+  # args_selfunc = inspect.getargspec(selfunc).args # Deprecated. Not supported in Python 3.12+
+  args_selfunc = inspect.getfullargspec(selfunc).args
   argdict = {attr: getattr(psr,attr) for attr in dir(psr) \
                                               if attr in args_selfunc}
   selection_mask_dict = selfunc(**argdict)
