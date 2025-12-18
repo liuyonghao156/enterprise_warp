@@ -1,0 +1,28 @@
+Metadata-Version: 2.4
+Name: enterprise_warp
+Version: 0.1
+Summary: A wrapper for Nanograv's Enterprise
+Home-page: https://github.com/bvgoncharov/enterprise_warp
+Author: Boris Goncharov, Andrew Zic
+Author-email: goncharov.boris@physics.msu.ru
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: home-page
+Dynamic: license-file
+Dynamic: summary
+
+# enterprise_warp
+
+[![Documentation Status](https://readthedocs.org/projects/enterprise-warp/badge/?version=latest)](https://enterprise-warp.readthedocs.io/en/latest/?badge=latest)
+
+Tools for pulsar timing array data analysis, based on Enterprise, Libstempo, Tempo2 and Bilby.
+
+Documentation: https://enterprise-warp.readthedocs.io/
