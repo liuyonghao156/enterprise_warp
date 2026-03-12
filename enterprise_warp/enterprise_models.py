@@ -402,8 +402,8 @@ class EnterpriseModels(object):
     kwargs = {
         "log10_A": parameter.__dict__[self.params.gwb_lgA_prior]\
         	(self.params.gwb_lgA[0],self.params.gwb_lgA[1]),
-        "gamma": parameter.Uniform(self.params.sn_gamma[0],self.params.sn_gamma[1]),
-        "fc": parameter.Uniform(self.params.sn_fc[0],self.params.sn_fc[1]),
+        "gamma": parameter.Uniform(self.params.gwb_gamma[0],self.params.gwb_gamma[1]),
+        "fc": parameter.Uniform(self.params.gwb_fc[0],self.params.gwb_fc[1]),
         "log10_rho": parameter.Uniform(self.params.gwb_lgrho[0],
                                        self.params.gwb_lgrho[1],
                                        size=nfreqs)
