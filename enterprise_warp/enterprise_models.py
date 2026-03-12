@@ -401,7 +401,7 @@ class EnterpriseModels(object):
     nfreqs = self.option_nfreqs(option, sel_func_name=None)
     kwargs = {
         "log10_A": parameter.__dict__[self.params.gwb_lgA_prior]\
-        	(self.params.sn_lgA[0],self.params.sn_lgA[1]),
+        	(self.params.gwb_lgA[0],self.params.gwb_lgA[1]),
         "gamma": parameter.Uniform(self.params.sn_gamma[0],self.params.sn_gamma[1]),
         "fc": parameter.Uniform(self.params.sn_fc[0],self.params.sn_fc[1]),
         "log10_rho": parameter.Uniform(self.params.gwb_lgrho[0],

@@ -533,9 +533,9 @@ class EnterpriseWarpResult(object):
       self.par_out_label = ''
     if self.opts.load_separated and self.par_out_label!='':
       self.pars = np.loadtxt(self.outdir + '/pars_' + self.par_out_label + \
-                             '.txt', dtype=np.unicode_)
+                             '.txt', dtype=np.str_)
     else:
-      self.pars = np.loadtxt(self.outdir + '/pars.txt', dtype=np.unicode_)
+      self.pars = np.loadtxt(self.outdir + '/pars.txt', dtype=np.str_)
     self._get_par_mask()
     if self.opts.info and (self.opts.name != 'all' or self.psr_dir == ''):
       print('Parameter names:')
