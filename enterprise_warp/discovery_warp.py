@@ -29,7 +29,6 @@ def init_pta_discovery(params_all):
     from_par_file = list()
 
     psr_model_list = []
-    pta_model = []
     common_gp_list = []
     global_gp_list = []
 
@@ -50,20 +49,28 @@ def init_pta_discovery(params_all):
 
       psr_model_list += [ds.PulsarLikelihood(psr_model)]
 
-      # Common signals in all pulsars
-      for psp, option in params.common_signals.items():
-        if "common_gp" in psp:
-          common_gp_list += [getattr(allpsr_model, psp)(option=option)]
-        elif "global_gp" in psp:
-          global_gp_list += [getattr(allpsr_model, psp)(option=option)]
-        else:
-          raise ValueError('Only common_gp and global_gp are supported as common signal when using Discovery as your package.')
+    # Common signals in all pulsars (add once per PTA, not once per pulsar)
+    for psp, option in params.common_signals.items():
+      term = getattr(allpsr_model, psp)(option=option)
+      # Discovery global GPs are "global" objects with `Fs` (one F per pulsar)
+      if hasattr(term, "Fs"):
+        global_gp_list.append(term)
+      else:
+        common_gp_list.append(term)
 
-  if not global_gp_list: global_gp_list = None
-  if not common_gp_list: common_gp_list = None
-  pta = ds.ArrayLikelihood(psr_model_list, commongp=common_gp_list, globalgp=global_gp_list)
+    if not global_gp_list:
+      global_gp_list = None
+    if not common_gp_list:
+      common_gp_list = None
 
-  ptas[ii] = pta
+    # `discovery.ArrayLikelihood` currently does not support globalgp-only models.
+    # When we have only a global GP, fall back to GlobalLikelihood.
+    if common_gp_list is None and global_gp_list is not None:
+      pta = ds.GlobalLikelihood(psr_model_list, globalgp=global_gp_list)
+    else:
+      pta = ds.ArrayLikelihood(psr_model_list, commongp=common_gp_list, globalgp=global_gp_list)
+
+    ptas[ii] = pta
 
   return ptas
 

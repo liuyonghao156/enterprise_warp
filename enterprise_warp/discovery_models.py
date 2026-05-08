@@ -37,25 +37,26 @@ class DiscoveryModels(EnterpriseModels):
   # Signle pulsar noise models
 
   def measurement_noise(self, option={}):
-    if option["selection"] != "by_backend": # not in selections.__dict__.keys():
-      raise ValueError('Only selection by_backend is supported for Discovery, for now')
-    else:
-      se = ds.signals.selection_backend_flags
-    measurement_noise_values = ds.makenoise_measurement(self.psr, noisedict=self.params.noisedict, selection=se)
-    return measurement_noise_values
+    selection = option.get("selection", "by_backend")
+    if selection == "no_selection":
+      return ds.makenoise_measurement_simple(self.psr, noisedict=self.params.noisedict)
+    if selection != "by_backend":
+      raise ValueError('Discovery measurement_noise supports selection "by_backend" or "no_selection".')
+    se = ds.signals.selection_backend_flags
+    return ds.makenoise_measurement(self.psr, noisedict=self.params.noisedict, selection=se)
 
   def efac(self,option={}):
     """
     EFAC signal:  multiplies ToA variance by EFAC**2, where ToA variance
     are diagonal components of the Likelihood covariance matrix.
     """
-    if option["selection"] != "by_backend": # not in selections.__dict__.keys():
-      raise ValueError('Only selection by_backend is supported for Discovery, for now')
-    else:
-      se = ds.signals.selection_backend_flags
-
-    efs = ds.makenoise_measurement(self.psr, noisedict=self.params.noisedict, selection=se)
-    return efs
+    selection = option.get("selection", "by_backend")
+    if selection == "no_selection":
+      return ds.makenoise_measurement_simple(self.psr, noisedict=self.params.noisedict)
+    if selection != "by_backend":
+      raise ValueError('Discovery efac supports selection "by_backend" or "no_selection".')
+    se = ds.signals.selection_backend_flags
+    return ds.makenoise_measurement(self.psr, noisedict=self.params.noisedict, selection=se)
 
 
   def equad(self,option={}):
@@ -64,13 +65,13 @@ class DiscoveryModels(EnterpriseModels):
     are diagonal components of the Likelihood covariance matrix.
     TempoNest format: sigma**2 = EFAC**2 * toaerr**2 + EQUAD**2
     """
-    if option["selection"] != "by_backend": # not in selections.__dict__.keys():
-      raise ValueError('Only selection by_backend is supported for Discovery, for now')
-    else:
-      se = ds.signals.selection_backend_flags
-
-    eqs = ds.makenoise_measurement(self.psr, noisedict=self.params.noisedict, selection=se)
-    return eqs
+    selection = option.get("selection", "by_backend")
+    if selection == "no_selection":
+      return ds.makenoise_measurement_simple(self.psr, noisedict=self.params.noisedict)
+    if selection != "by_backend":
+      raise ValueError('Discovery equad supports selection "by_backend" or "no_selection".')
+    se = ds.signals.selection_backend_flags
+    return ds.makenoise_measurement(self.psr, noisedict=self.params.noisedict, selection=se)
 
   def ecorr(self,option={}):
     """

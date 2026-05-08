@@ -8,6 +8,7 @@ import numpy as np
 import json
 import glob
 import os
+from pathlib import Path
 import optparse
 import warnings
 import hashlib
@@ -171,9 +172,9 @@ class Params(object):
     elif self.pta_package=="discovery":
       self.noise_model_obj = DiscoveryModels
     if custom_models_obj is not None:
-      if self.pta_package=='discovery' and not custom_models_obj.__bases__[0] == DiscoveryModels:
+      if self.pta_package=='discovery' and not issubclass(custom_models_obj, DiscoveryModels):
         warnings.warn('Parameter pta_package is \'discovery\', but the custom model object is not based on discovery_models.DiscoveryModels. Using discovery_models.DiscoveryModels instead.')
-      elif self.pta_package=='enterprise' and not custom_models_obj.__bases__[0] == EnterpriseModels:
+      elif self.pta_package=='enterprise' and not issubclass(custom_models_obj, EnterpriseModels):
         warnings.warn('Parameter pta_package is \'enterprise\', but the custom model object is not based on enterprise_models.EnterpriseModels. Using enterprise_models.EnterpriseModels instead.')
       else:
         self.noise_model_obj = custom_models_obj
@@ -470,7 +471,9 @@ class Params(object):
             if self.pta_package=='discovery':
               if process_rank == 0:
                 # Saving feather file for future use
-                feather = pp.replace('par','feather')
+                # NOTE: do NOT use string replace here: it corrupts paths like ".../partim/..."
+                # because "par" is a substring of "partim".
+                feather = str(Path(pp).with_suffix('.feather'))
                 if 'noisefiles' in self.__dict__.keys():
                   noise_dict_psr = get_noise_dict_psr(psr.name, \
                         self.noisefiles)
